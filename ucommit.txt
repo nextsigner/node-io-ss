@@ -1,1 +1,1 @@
-Se sube todo
+Se crea función stdin para json

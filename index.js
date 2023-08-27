@@ -3,7 +3,21 @@ const {Server} = require('net')
 const server = new Server(socket=> {
   console.log('client connected')
   process.stdin.on('data', data => {
-    socket.write(`${data.toString()}`);
+    let dataWrited=`${data.toString()}`
+    dataWrited=dataWrited.substring(0,dataWrited.length-1);
+    let json={};
+    json.from='node-io-ss';
+    json.to='all';
+    json.data=dataWrited//`${data.toString()}`;
+    let m0=(json.data).split(' ');
+    if(m0.length>1 && m0[0].indexOf('from:')===0){
+        let m1=m0[0].split('from:');
+        json.to=m1[1];
+        json.data=m0[1];
+    }
+    let ds=JSON.stringify(json, null, 2)
+    console.log('Enviando: '+ds)
+    socket.write(ds);
     //process.exit();
   });
 
