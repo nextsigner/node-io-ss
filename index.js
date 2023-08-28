@@ -5,9 +5,29 @@ for(var i=0;i<process.argv.length;i++){
     let arg=process.argv[i]
     if(arg.indexOf('debug')>=0)DEBUG=true
 }
+
+const connectedSockets = new Set();
+
+// broadcast to all connected sockets except one
+connectedSockets.broadcast = function(data, except) {
+    for (let sock of this) {
+        if (sock !== except) {
+            sock.write(data);
+        }
+    }
+}
+
 const server = new Server(socket=> {
 
   if(DEBUG)console.log('client connected')
+  connectedSockets.add(socket);
+  socket.on('end', function() {
+    connectedSockets.delete(socket);
+  });
+  socket.on('data', function(data) {
+      console.log('Server received');
+      connectedSockets.broadcast(data, socket);
+  });
   process.stdin.on('data', data => {
     let dataWrited=`${data.toString()}`
     dataWrited=dataWrited.substring(0,dataWrited.length-1);

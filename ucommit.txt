@@ -1,1 +1,1 @@
-Se agrega var DEBUG
+Se logra reenviar a todos los clientes
