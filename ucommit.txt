@@ -1,1 +1,1 @@
-Se crea función stdin para json
+Se agrega var DEBUG
