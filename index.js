@@ -1,5 +1,6 @@
 const {Server} = require('net')
 const PORT = process.env.PORT || 3111;
+const HOST = process.env.HOST || '192.168.1.42';//'localhost';
 var DEBUG = false;
 for(var i=0;i<process.argv.length;i++){
     let arg=process.argv[i]
@@ -27,6 +28,15 @@ const server = new Server(socket=> {
   socket.on('data', function(data) {
       console.log('Server received');
       connectedSockets.broadcast(data, socket);
+  });
+  server.on('error', function (e) {
+    if (e.code == 'EADDRINUSE') {
+      console.log('Address in use, retrying...');
+      setTimeout(function () {
+        server.close();
+        server.listen(PORT, HOST);
+      }, 1000);
+    }
   });
   process.stdin.on('data', data => {
     let dataWrited=`${data.toString()}`
@@ -57,7 +67,8 @@ const server = new Server(socket=> {
     if(DEBUG)console.log('console: from: ['+json.from+']')
     if(DEBUG)console.log('console: to: ['+json.to+']')
     if(DEBUG)console.log('console: data: ['+json.data+']')
-    let cfrom=json.from
+    socket.write(JSON.stringify(json))
+    /*let cfrom=json.from
     let cto=json.to
     if(json.to==='node-io-ss' && json.data.indexOf('conn_')>=0){
         json.data='Conección registrada.'
@@ -68,7 +79,7 @@ const server = new Server(socket=> {
         json.from=cto
         json.to=cfrom
         socket.write(JSON.stringify(json))
-    }
+    }*/
   })
 
   // Send the client a message to disconnect from the server after a minute
@@ -81,7 +92,7 @@ const server = new Server(socket=> {
   if(DEBUG)socket.on('end', () => console.log('client disconnected'))
 })
 
-server.listen(PORT, 'localhost', () => console.log('Conectado en el puerto: '+PORT))
+server.listen(PORT, HOST, () => console.log('Conectado en '+HOST+':'+PORT))
 
 
 

@@ -1,1 +1,1 @@
-Se logra reenviar a todos los clientes
+Se hizo funcionar todo en node-io-qml
