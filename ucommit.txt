@@ -1,1 +1,1 @@
-Se hizo funcionar todo en node-io-qml
+Se optimizan para recibir parámetros host y port
