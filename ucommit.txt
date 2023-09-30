@@ -1,1 +1,1 @@
-Se optimizan para recibir parámetros host y port
+Se agrega setKeepAlive(true)

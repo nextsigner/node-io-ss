@@ -1,6 +1,6 @@
 const {Server} = require('net')
 const PORT = process.env.PORT || 3111;
-const HOST = process.env.HOST || '192.168.1.43';//'localhost';
+const HOST = process.env.HOST || '192.168.1.48';//'localhost';
 var DEBUG = false;
 for(var i=0;i<process.argv.length;i++){
     let arg=process.argv[i]
@@ -22,6 +22,7 @@ const server = new Server(socket=> {
 
   if(DEBUG)console.log('client connected')
   connectedSockets.add(socket);
+  socket.setKeepAlive(true);
   socket.on('end', function() {
     connectedSockets.delete(socket);
   });
