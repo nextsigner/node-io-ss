@@ -1,1 +1,1 @@
-Se agrega setKeepAlive(true)
+Se edita readme
