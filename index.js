@@ -1,6 +1,6 @@
 const {Server} = require('net')
-const PORT = process.env.PORT || 3111;
-const HOST = process.env.HOST || '192.168.1.48';//'localhost';
+const PORT = process.env.NODEIOSPORT || 3111;
+const SERVERIP = process.env.NODEIOSIP || '192.168.1.48';//'localhost';
 var DEBUG = false;
 for(var i=0;i<process.argv.length;i++){
     let arg=process.argv[i]
@@ -35,7 +35,7 @@ const server = new Server(socket=> {
       console.log('Address in use, retrying...');
       setTimeout(function () {
         server.close();
-        server.listen(PORT, HOST);
+        server.listen(PORT, SERVERIP);
       }, 1000);
     }
   });
@@ -93,7 +93,7 @@ const server = new Server(socket=> {
   if(DEBUG)socket.on('end', () => console.log('client disconnected'))
 })
 
-server.listen(PORT, HOST, () => console.log('Conectado en '+HOST+':'+PORT))
+server.listen(PORT, SERVERIP, () => console.log('Conectado en '+SERVERIP+':'+PORT))
 
 
 

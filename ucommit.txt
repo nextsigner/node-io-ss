@@ -1,1 +1,1 @@
-Se edita readme
+Se renombra variable HOST a SERVERIP

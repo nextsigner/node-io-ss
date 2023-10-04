@@ -1,6 +1,6 @@
 {
   "name": "node-io-ss",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A NodeJs Tcp Socket Server Input and Output",
   "main": "index.js",
   "scripts": {

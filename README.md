@@ -36,6 +36,7 @@ Get to this module in this repository: https://github.com/nextsigner/node-io-qml
 
 Example Qml code:
 
+```javascript
 NodeIOQml{
     id: nioqml
     user: 'user1'
@@ -55,3 +56,4 @@ NodeIOQml{
         log.text+='Error:\n'+e+'\n\n'
     }
 }
+```
