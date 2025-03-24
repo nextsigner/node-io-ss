@@ -1,10 +1,21 @@
 const {Server} = require('net')
-const PORT = process.env.NODEIOSPORT || 3111;
-const SERVERIP = process.env.NODEIOSIP || '192.168.1.48';//'localhost';
+var PORT = process.env.NODEIOSPORT || 3111;
+var SERVERIP = process.env.NODEIOSIP || '127.0.0.1';
 var DEBUG = false;
+var setPortFromArg=false;
 for(var i=0;i<process.argv.length;i++){
     let arg=process.argv[i]
     if(arg.indexOf('debug')>=0)DEBUG=true
+
+    var m0=arg.split('host=')
+    if(m0.length===2){
+        SERVERIP=m0[1]
+    }
+    m0=arg.split('port=')
+    if(m0.length===2){
+        PORT=m0[1]
+        setPortFromArg=true
+    }
 }
 
 const connectedSockets = new Set();
@@ -93,7 +104,23 @@ const server = new Server(socket=> {
   if(DEBUG)socket.on('end', () => console.log('client disconnected'))
 })
 
-server.listen(PORT, SERVERIP, () => console.log('Conectado en '+SERVERIP+':'+PORT))
+if(!setPortFromArg){
+    var fs=require('fs')
+    const os = require('os');
+    const homeDir = os.homedir();
+    const cfgFilePath=homeDir+'/.config/nodeiosport.cfg'
+    var readStream = fs.createReadStream(cfgFilePath, 'utf8');
+    readStream.on('data', function(chunk){
+        PORT = parseInt(chunk.replace(/\n/g,''));
+        console.log('Puerto de conexión: '+PORT)
+        server.listen(PORT, SERVERIP, () => console.log('Conectado en '+SERVERIP+':'+PORT))
+    });
+
+}else{
+    console.log('Puerto de conexión: '+PORT)
+    server.listen(PORT, SERVERIP, () => console.log('Conectado en '+SERVERIP+':'+PORT))
+}
+
 
 
 
